@@ -1,0 +1,67 @@
+# DDL
+create database  store;
+
+create table countries(
+    id int primary key ,
+    name varchar(255) unique ,
+    continent_name char(255) not null
+);
+
+create table user(
+    id varchar(200) primary key ,
+    email varchar(255) unique ,
+    gender char(10) check ( gender = 'male' or gender= 'female'),
+    created_at datetime default  CURRENT_TIMESTAMP,
+    country_code int(200),
+    foreign key (country_code) references  countries(id)
+);
+
+
+create table orders (
+    id int primary key ,
+    status char(20) check ( status = 'start' or status = 'finish' ),
+    created_at datetime,
+    user_id varchar(200),
+    foreign key (user_id) references user(id)
+);
+
+create table products(
+    id int primary key ,
+    price int(255) default 0,
+    name char(255) not null ,
+    status char(20) check ( status = 'valid' or status = 'expired' )
+);
+
+create table order_products(
+    order_id int,
+    product_id int,
+    quantity int(255) default 0,
+    foreign key (order_id) references orders (id),
+    foreign key (product_id) references products(id)
+
+);
+
+# DQL
+
+select * from user;
+select * from products;
+select * from countries;
+select * from orders;
+select * from order_products;
+
+# DML insert
+
+insert  into countries values (10,'KSA', 'Riyadh');
+insert into user values (1,'a@mail', 'male','2010-01-03 04:30:43' , 10);
+insert into orders values (2202, 'start', '2022-01-03 04:30:43', 1);
+insert into products values (90, 150, 'play card', 'valid');
+insert into products values (901, 50, 'book', 'expired');
+insert into order_products values (2202, 90, 2);
+
+# DML update
+update countries set continent_name = 'Majmaah' where id = 10;
+
+
+# DML delete
+
+delete  from products where id = 901;
